@@ -191,3 +191,94 @@ Use:
 GKE + L4 + vLLM + KEDA
 
 This is the sweet spot. Most cost-effective serious production setup right now.
+
+
+
+### But the reason matters:
+
+Why GKE usually wins for LLM inference
+1. Better GPU economics (usually)
+
+Google Cloud Platform often has better availability/pricing for inference-friendly GPUs like:
+
+NVIDIA L4 → best price/performance for 7B–14B inference
+NVIDIA T4 → older but cheap
+NVIDIA A100 → if you need larger loads
+
+On Microsoft Azure, GPU quota + regional scarcity can be more annoying.
+
+For production, availability matters more than list price.
+
+2. GKE Autopilot is cleaner
+
+For autoscaling GPU workloads:
+
+easier node lifecycle management
+cleaner scheduling behavior
+less operational tuning
+
+On AKS, GPU nodepool management often needs more babysitting.
+
+Since you already know AKS, this won’t be hard — just more operational overhead.
+
+3. Cloud Run GPU is a killer option
+
+This is where GCP is ahead.
+
+You can:
+
+scale to zero
+pay only when active
+deploy a quantized 7B model fast
+
+AKS has no equally clean equivalent.
+
+For bursty traffic this can save a lot.
+
+4. Vertex AI ecosystem is stronger for model-serving workflows
+
+If later you want:
+
+managed endpoint rollouts
+model registry
+traffic splitting
+evaluation pipelines
+
+Vertex AI is usually ahead of Azure’s managed LLM infra.
+
+Where AKS is better
+
+Choose AKS if your org is already deeply invested in:
+
+Microsoft Entra ID
+Private Link everywhere
+Azure networking/security governance
+existing AKS Terraform modules
+compliance/security teams prefer Azure
+
+Then operational consistency may outweigh infra savings.
+
+Since you already build enterprise-grade AKS/Terraform stacks, AKS would be faster for you initially.
+
+My recommendation for you specifically
+
+Because you already know:
+
+Kubernetes deeply
+Terraform modules
+autoscaling/KEDA
+enterprise production infra
+
+I’d do:
+
+Primary:
+Google Cloud Platform + Google Kubernetes Engine + KEDA + vLLM
+
+Fallback if company is Azure-first:
+Microsoft Azure + Azure Kubernetes Service + KEDA + vLLM
+
+If this is your own infra / startup / side platform:
+
+Go GCP.
+
+That’s probably the best cost/performance path today for serving fine-tuned small LLMs.

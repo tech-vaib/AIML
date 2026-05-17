@@ -1,0 +1,8 @@
+architecture: replication
+
+master:
+  persistence:
+    enabled: true
+
+replica:
+  replicaCount: 2

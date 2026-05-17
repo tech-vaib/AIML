@@ -1,0 +1,6 @@
+replicaCount: 4
+gpuClass: a100
+
+autoscaling:
+  minReplicas: 1
+  maxReplicas: 12

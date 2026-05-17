@@ -1,0 +1,60 @@
+replicaCount: 2
+
+image:
+  repository: vllm/vllm-openai
+  tag: latest
+
+model:
+  name: meta-llama/Meta-Llama-3-8B-Instruct
+  version: v1
+  quantization: awq
+  tensorParallel: 1
+
+gpuClass: l4
+
+enableSpotScheduling: false
+
+resources:
+  requests:
+    cpu: "4"
+    memory: 16Gi
+    nvidia.com/gpu: "1"
+  limits:
+    cpu: "8"
+    memory: 32Gi
+    nvidia.com/gpu: "1"
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPU: 70
+  targetMemory: 80
+  targetLatency: 200
+
+pdb:
+  minAvailable: 1
+
+prewarming:
+  enabled: true
+  minWarmPods: 1
+
+prometheus:
+  enabled: true
+
+grafana:
+  enabled: true
+
+redis:
+  enabled: true
+  architecture: replication
+
+rollouts:
+  strategy: canary
+  canaryWeight: 10
+  pauseSeconds: 60
+
+adapters:
+  - finance
+  - legal
+  - support

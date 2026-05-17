@@ -1,0 +1,6 @@
+replicaCount: 2
+gpuClass: l4
+
+autoscaling:
+  minReplicas: 1
+  maxReplicas: 6

@@ -1,0 +1,22 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: vllm
+spec:
+  scaleTargetRef:
+    name: vllm
+
+  minReplicaCount: {{ .Values.autoscaling.minReplicas }}
+  maxReplicaCount: {{ .Values.autoscaling.maxReplicas }}
+
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-operated.monitoring.svc.cluster.local:9090
+        metricName: latency
+        threshold: "{{ .Values.autoscaling.targetLatency }}"
+        query: |
+          histogram_quantile(
+            0.95,
+            sum(rate(vllm_request_latency_bucket[2m])) by (le)
+          )

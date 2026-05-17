@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: llm-quota
+spec:
+  hard:
+    requests.nvidia.com/gpu: "8"
+    limits.cpu: "64"
+    limits.memory: 256Gi

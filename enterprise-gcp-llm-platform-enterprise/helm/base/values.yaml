@@ -1,0 +1,10 @@
+pdb:
+  minAvailable: 1
+
+prewarming:
+  enabled: true
+  minWarmPods: 1
+
+budgetControls:
+  enabled: true
+  gpuQuota: 8

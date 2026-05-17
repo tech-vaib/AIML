@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: vllm
+  template:
+    metadata:
+      labels:
+        app: vllm
+        version: stable
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: vllm
+
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: gpu-class
+                    operator: In
+                    values:
+                      - {{ .Values.gpuClass }}
+
+      containers:
+        - name: vllm
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          args:
+            - "--model={{ .Values.model.name }}"
+            - "--quantization={{ .Values.model.quantization }}"
+            - "--enable-lora"
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          env:
+            - name: HF_HOME
+              value: /models/cache
+            - name: LOG_LEVEL
+              value: INFO
+            - name: REDIS_URL
+              value: redis-master.default.svc.cluster.local
+          ports:
+            - containerPort: 8000

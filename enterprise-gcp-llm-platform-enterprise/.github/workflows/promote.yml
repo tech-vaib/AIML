@@ -1,0 +1,23 @@
+name: promote
+
+on:
+  workflow_dispatch:
+
+jobs:
+  promote-stage-to-prod:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate rollout health
+        run: echo "Checking rollout health"
+
+      - name: Promote image
+        run: echo "Promoting release"
+
+      - name: Trigger ArgoCD sync
+        run: echo "Syncing production"

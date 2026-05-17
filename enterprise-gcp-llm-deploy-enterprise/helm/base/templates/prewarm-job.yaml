@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: model-prewarm
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: prewarm
+          image: curlimages/curl
+          command:
+            - sh
+            - -c
+            - |
+              curl http://{{ .Release.Name }}:8000/v1/models

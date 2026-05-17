@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: vllm
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - llm-gateway
+  http:
+    - retries:
+        attempts: 3
+        perTryTimeout: 5s
+      route:
+        - destination:
+            host: vllm
+            subset: stable
+          weight: 90
+        - destination:
+            host: vllm
+            subset: canary
+          weight: 10

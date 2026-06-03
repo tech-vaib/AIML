@@ -2,7 +2,7 @@ import subprocess
 import json
 
 
-PROJECT_ID = "healix-dev-v1"
+PROJECT_ID = "ABCD-dev-v1"
 
 VERTEX_AI_ROLES = {
     "roles/aiplatform.user",

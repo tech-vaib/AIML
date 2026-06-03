@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 # CONFIGURATION
 # ============================================================
 
-PROJECT_ID = "healix-dev-v1"
+PROJECT_ID = "ABCD-dev-v1"
 VERTEX_AI_ROLE = "roles/aiplatform.user"
 
 SERVICE_ACCOUNT_REGEX = re.compile(

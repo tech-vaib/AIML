@@ -10,7 +10,7 @@ from pathlib import Path
 # CONFIGURATION
 # ============================================================
 
-PROJECT_ID = "healix-dev-v1"  # <-- Update this
+PROJECT_ID = "ABCD-dev-v1"  # <-- Update this
 
 VERTEX_AI_ROLE = "roles/aiplatform.user"
 
